@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Checksum Error Detection</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-light">
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-9">
+
+            <div class="card shadow-lg">
+                <div class="card-header bg-primary text-white text-center">
+                    <h4>Checksum Error Detection</h4>
+                    <small>Step-by-Step Binary Addition</small>
+                </div>
+
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">
+                                Binary Data (space separated)
+                            </label>
+                            <input type="text" name="binary_data"
+                                   class="form-control"
+                                   placeholder="Example: 1011 1001 1100"
+                                   required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Word Size</label>
+                            <input type="number" name="word_size"
+                                   class="form-control"
+                                   value="4" required>
+                        </div>
+
+                        <div class="d-grid">
+                            <button class="btn btn-success btn-lg">
+                                Calculate
+                            </button>
+                        </div>
+                    </form>
+
+                    {% if checksum %}
+                        <hr>
+
+                        <h5 class="text-center mb-3">Binary Addition Steps</h5>
+
+                        <table class="table table-striped table-bordered text-center">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>Step</th>
+                                    <th>Previous Sum</th>
+                                    <th>Word Added</th>
+                                    <th>New Sum</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for step in steps %}
+                                <tr>
+                                    <td>{{ forloop.counter }}</td>
+                                    <td>{{ step.previous_sum }}</td>
+                                    <td>{{ step.word }}</td>
+                                    <td>{{ step.result_sum }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+
+                        <table class="table table-bordered text-center mt-4">
+                            <tr>
+                                <th>Final Sum</th>
+                                <td>{{ final_sum }}</td>
+                            </tr>
+                            <tr>
+                                <th>Checksum (1's Complement)</th>
+                                <td class="fw-bold text-primary">{{ checksum }}</td>
+                            </tr>
+                            <tr>
+                                <th>Status</th>
+                                <td class="fw-bold">{{ status }}</td>
+                            </tr>
+                            <tr>
+                                <th>Encoded Data</th>
+                                <td class="fw-bold text-success">{{ encoded_data }}</td>
+                            </tr>
+                        </table>
+
+                        <div class="alert alert-info text-center">
+                            Error-Free only if checksum = all 0's
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
